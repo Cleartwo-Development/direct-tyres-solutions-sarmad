@@ -5,19 +5,35 @@ import Image from "next/image";
 import { Mail, MapPin, PhoneCall } from "lucide-react";
 import Reveal from "../Reveal";
 import { heroImageV2, siteConfigV2 } from "@/lib/site-data-v2";
+import { isValidUkPhone, normaliseUkPhone, PHONE_ERROR } from "@/lib/phone";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
 export default function QuoteContact2() {
   const [status, setStatus] = useState<Status>("idle");
+  const [phoneError, setPhoneError] = useState("");
   const telHref = `tel:${siteConfigV2.phone.replace(/\s/g, "")}`;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    // event.preventDefault();
+    // setStatus("submitting");
+
+    // const form = event.currentTarget;
+    // const data = new FormData(form);
+
     event.preventDefault();
-    setStatus("submitting");
 
     const form = event.currentTarget;
     const data = new FormData(form);
+    const phone = String(data.get("phone") ?? "");
+
+    if (!isValidUkPhone(phone)) {
+      setPhoneError(PHONE_ERROR);
+      (form.elements.namedItem("phone") as HTMLInputElement | null)?.focus();
+      return;
+    }
+    setPhoneError("");
+    setStatus("submitting");
 
     try {
       const res = await fetch("/api/quote", {
@@ -25,7 +41,8 @@ export default function QuoteContact2() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: data.get("name"),
-          phone: data.get("phone"),
+          // phone: data.get("phone"),
+          phone: normaliseUkPhone(phone),
           tyreSize: data.get("tyreSize"),
           details: `${data.get("postcode") ?? ""} ${data.get("message") ?? ""}`.trim(),
         }),
@@ -138,10 +155,22 @@ export default function QuoteContact2() {
                       id="phone"
                       name="phone"
                       required
-                      className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-white placeholder:text-gray-500 focus:ring-2 focus:ring-[#0058f7] focus:border-transparent transition-all outline-none"
-                      placeholder="Phone Number"
                       type="tel"
+                      inputMode="tel"
+                      autoComplete="tel"
+                      maxLength={17}
+                      placeholder="Phone Number"
+                      aria-invalid={!!phoneError}
+                      aria-describedby={phoneError ? "phone-error" : undefined}
+                      onChange={() => phoneError && setPhoneError("")}
+                      className={`w-full rounded-xl border ${phoneError ? "border-red-400" : "border-white/15"} bg-white/5 px-4 py-2 text-white placeholder:text-gray-500 focus:ring-2 focus:ring-[#0058f7] focus:border-transparent transition-all outline-none`}
+                      // className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-white placeholder:text-gray-500 focus:ring-2 focus:ring-accent focus:border-transparent transition-all outline-none"
                     />
+                    {phoneError && (
+                      <p id="phone-error" className="mt-1 text-red-400 text-xs font-semibold">
+                        {phoneError}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div>
