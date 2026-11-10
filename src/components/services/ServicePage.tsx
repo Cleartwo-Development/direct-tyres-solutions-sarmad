@@ -25,20 +25,42 @@ const trustItems = [
   { icon: Star, label: "4.9★ · 500+ Reviews" },
 ];
 
+const CONTACT_LINK =
+  "font-semibold underline underline-offset-4 transition-opacity hover:opacity-70";
+
 /**
- * Renders text; `[label](/path)` becomes an internal link. The approved design
- * shows these cross-links as plain running text, so the anchor inherits the
- * surrounding colour and has no underline.
+ * Renders text; `[label](/path)` becomes an internal link, and the phone
+ * number and the word "WhatsApp" become call / WhatsApp links.
  */
 function RichText({ text }: { text: string }) {
-  const parts = text.split(/(\[[^\]]+\]\([^)]+\))/g);
+  const parts = text.split(/(\[[^\]]+\]\([^)]+\)|07955 266 077|WhatsApp)/g);
   return (
     <>
       {parts.map((part, i) => {
+        if (part === PHONE_DISPLAY) {
+          return (
+            <a key={i} href={PHONE_TEL} className={CONTACT_LINK}>
+              {part}
+            </a>
+          );
+        }
+        if (part === "WhatsApp") {
+          return (
+            <a
+              key={i}
+              href={WHATSAPP}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={CONTACT_LINK}
+            >
+              {part}
+            </a>
+          );
+        }
         const m = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
         if (!m) return part;
         return (
-          <Link key={i} href={m[2]}>
+          <Link key={i} href={m[2]} className="transition-colors hover:underline">
             {m[1]}
           </Link>
         );
@@ -73,7 +95,7 @@ export default function ServicePage({ data }: { data: ServicePageData }) {
         />
         <div className="relative mx-auto max-w-6xl px-5 py-24 md:py-32">
           <p className="mb-4 text-sm opacity-80">
-            <Link href="/">Home</Link> / Services /{" "}
+            <Link href="/" className="transition-colors hover:text-svc-yellow">Home</Link> / Services /{" "}
             <span className="text-svc-yellow">{data.shortLabel}</span>
           </p>
           <span className="inline-flex items-center gap-2 rounded-full bg-svc-yellow/15 px-4 py-1.5 text-sm font-medium text-svc-yellow">
@@ -97,6 +119,8 @@ export default function ServicePage({ data }: { data: ServicePageData }) {
             <a
               href={WHATSAPP}
               className="inline-flex items-center gap-2 rounded-full border-2 border-svc-yellow px-7 py-4 font-semibold text-svc-yellow transition hover:bg-svc-yellow hover:text-svc-deep"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <MessageCircle className="h-5 w-5" />
               WhatsApp Us
@@ -177,7 +201,7 @@ export default function ServicePage({ data }: { data: ServicePageData }) {
                 <span className="font-svc text-[30px] font-black leading-[38px] text-svc-yellow">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <p className="mt-3 opacity-85">{step}</p>
+                <p className="mt-3 opacity-85"><RichText text={step} /></p>
               </div>
             ))}
           </div>
@@ -224,7 +248,7 @@ export default function ServicePage({ data }: { data: ServicePageData }) {
                 key={faq.q}
                 className="group rounded-[24px] border border-svc-border bg-svc-card p-5"
               >
-                <summary className="flex cursor-pointer list-none items-center justify-between font-semibold">
+                <summary className="flex cursor-pointer list-none items-center justify-between font-semibold transition-opacity hover:opacity-70">
                   {faq.q}
                   <ChevronDown className="h-5 w-5 transition group-open:rotate-180" />
                 </summary>
@@ -269,18 +293,20 @@ export default function ServicePage({ data }: { data: ServicePageData }) {
           <h2 className="font-svc text-[28px] font-black uppercase leading-[36px] md:text-[40px] md:leading-[48px]">
             {data.ctaHeading}
           </h2>
-          <p className="max-w-2xl text-lg">{data.ctaText}</p>
+          <p className="max-w-2xl text-lg"><RichText text={data.ctaText} /></p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
               href={PHONE_TEL}
-              className="inline-flex items-center gap-2 rounded-full bg-svc-deep px-7 py-4 font-semibold text-svc-light"
+              className="inline-flex items-center gap-2 rounded-full bg-svc-deep px-7 py-4 font-semibold text-svc-light transition hover:bg-svc-navy"
             >
               <Phone className="h-5 w-5" />
               CALL NOW: {PHONE_DISPLAY}
             </a>
             <a
               href={WHATSAPP}
-              className="inline-flex items-center gap-2 rounded-full border-2 border-svc-deep px-7 py-4 font-semibold"
+              className="inline-flex items-center gap-2 rounded-full border-2 border-svc-deep px-7 py-4 font-semibold transition hover:bg-svc-deep hover:text-svc-light"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <MessageCircle className="h-5 w-5" />
               WhatsApp Us
