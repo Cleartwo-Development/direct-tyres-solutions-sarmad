@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { Clock, Mail, MapPin, MessageCircle, PhoneCall } from "lucide-react";
 import Reveal from "../Reveal";
 import { siteConfig3 } from "@/lib/site-data3";
@@ -12,6 +13,7 @@ type Status = "idle" | "submitting" | "success" | "error";
 export default function ContactUsPage3() {
   const [status, setStatus] = useState<Status>("idle");
   const [phoneError, setPhoneError] = useState("");
+  const router = useRouter();
   const telHref = `tel:${siteConfig3.phone.replace(/\s/g, "")}`;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -50,8 +52,9 @@ export default function ContactUsPage3() {
 
       if (!res.ok) throw new Error("Request failed");
 
-      setStatus("success");
-      form.reset();
+      // setStatus("success");
+      // form.reset();
+      router.push("/thank-you");
     } catch {
       setStatus("error");
     }
