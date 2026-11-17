@@ -6,6 +6,7 @@ import OrganizationJsonLd from "@/components/OrganizationJsonLd";
 import FloatingContactButtons from "@/components/FloatingContactButtons";
 import { SITE_URL } from "@/lib/seo";
 import "./globals.css";
+import { SiteJsonLd } from "@/lib/cms";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -85,7 +86,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
-        <OrganizationJsonLd />
+        <SiteJsonLd fallback={<OrganizationJsonLd />} />
         <Header3 />
         {children}
         <Footer3 />

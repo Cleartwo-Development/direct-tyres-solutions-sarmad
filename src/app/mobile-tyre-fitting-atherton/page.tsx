@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import AthertonPage from "@/components/locations/AthertonPage";
 import LocationJsonLd from "@/components/LocationJsonLd";
 import { SITE_URL } from "@/lib/seo";
+import { cmsMetadata, PageJsonLd } from "@/lib/cms";
 
-export const metadata: Metadata = {
+const fallbackMetadata: Metadata = {
   title: "Mobile Tyre Fitting in Atherton | Direct Tyre Solutions",
   description:
     "24/7 mobile tyre fitting in Atherton. Rapid home, workplace and roadside tyre replacement covering residential routes around the A577 and A579.",
@@ -15,8 +16,12 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <LocationJsonLd areaLabel="Atherton" slug="atherton" />
+      <PageJsonLd path="/mobile-tyre-fitting-atherton" fallback={<LocationJsonLd areaLabel="Atherton" slug="atherton" />} />
       <AthertonPage />
     </>
   );
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/mobile-tyre-fitting-atherton", fallbackMetadata);
 }

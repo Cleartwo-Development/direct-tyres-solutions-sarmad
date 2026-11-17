@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import ManchesterPage from "@/components/locations/ManchesterPage";
 import LocationJsonLd from "@/components/LocationJsonLd";
 import { SITE_URL } from "@/lib/seo";
+import { cmsMetadata, PageJsonLd } from "@/lib/cms";
 
-export const metadata: Metadata = {
+const fallbackMetadata: Metadata = {
   title: "Mobile Tyre Fitting in Manchester | Direct Tyre Solutions",
   description:
     "24/7 mobile tyre fitting across Greater Manchester. Emergency roadside and driveway tyre replacement in 20–35 minutes.",
@@ -15,8 +16,12 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <LocationJsonLd areaLabel="Manchester" slug="manchester" />
+      <PageJsonLd path="/mobile-tyre-fitting-manchester" fallback={<LocationJsonLd areaLabel="Manchester" slug="manchester" />} />
       <ManchesterPage />
     </>
   );
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/mobile-tyre-fitting-manchester", fallbackMetadata);
 }
