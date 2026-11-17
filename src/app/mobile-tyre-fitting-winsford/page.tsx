@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import WinsfordPage from "@/components/locations/WinsfordPage";
 import LocationJsonLd from "@/components/LocationJsonLd";
 import { SITE_URL } from "@/lib/seo";
+import { cmsMetadata, PageJsonLd } from "@/lib/cms";
 
-export const metadata: Metadata = {
+const fallbackMetadata: Metadata = {
   title: "Mobile Tyre Fitting in Winsford | Direct Tyre Solutions",
   description:
     "24/7 mobile tyre fitting in Winsford. Rapid response home, workplace and roadside tyre replacement covering routes around A54, A530, A533.",
@@ -15,8 +16,12 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <LocationJsonLd areaLabel="Winsford" slug="winsford" />
+      <PageJsonLd path="/mobile-tyre-fitting-winsford" fallback={<LocationJsonLd areaLabel="Winsford" slug="winsford" />} />
       <WinsfordPage />
     </>
   );
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/mobile-tyre-fitting-winsford", fallbackMetadata);
 }

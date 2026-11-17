@@ -1,9 +1,22 @@
-import { Archivo } from "next/font/google";
+import localFont from "next/font/local";
 
-/** Display font used by the service pages (matches the approved Lovable design). */
-export const archivo = Archivo({
+/**
+ * Display font used by the service pages (matches the approved Lovable design).
+ * Self-hosted from @fontsource/archivo so builds never depend on downloading it from Google Fonts.
+ */
+export const archivo = localFont({
   variable: "--font-archivo",
-  subsets: ["latin"],
-  weight: ["700", "900"],
   display: "swap",
+  src: [
+    {
+      path: "../../../node_modules/@fontsource/archivo/files/archivo-latin-700-normal.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../../node_modules/@fontsource/archivo/files/archivo-latin-900-normal.woff2",
+      weight: "900",
+      style: "normal",
+    },
+  ],
 });

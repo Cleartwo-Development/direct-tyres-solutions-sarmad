@@ -3,8 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Home } from "lucide-react";
 import { heroFleetImage } from "@/lib/site-data-v2";
+import { cmsMetadata } from "@/lib/cms";
 
-export const metadata: Metadata = {
+const fallbackMetadata: Metadata = {
   title: "Thank You | Direct Tyre Solutions",
   description: "Thanks for your callback request. Our team will be in touch shortly.",
   robots: { index: false, follow: false },
@@ -49,4 +50,8 @@ export default function ThankYouPage() {
       </section>
     </main>
   );
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/thank-you", fallbackMetadata);
 }

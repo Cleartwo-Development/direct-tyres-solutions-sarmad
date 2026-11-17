@@ -10,6 +10,7 @@ import {
   Star,
 } from "lucide-react";
 import ServiceJsonLd from "@/components/services/ServiceJsonLd";
+import { PageJsonLd } from "@/lib/cms";
 import { archivo } from "@/components/services/fonts";
 import { BadgeCheck, CircleCheck } from "@/components/services/icons";
 import { otherServiceLinks, type ServicePageData } from "@/lib/services-data";
@@ -74,7 +75,7 @@ export default function ServicePage({ data }: { data: ServicePageData }) {
 
   return (
     <main className={`${archivo.variable} pt-20 bg-svc-bg text-svc-fg`}>
-      <ServiceJsonLd data={data} />
+      <PageJsonLd path={`/services/${data.slug}`} fallback={<ServiceJsonLd data={data} />} />
 
       {/* Hero */}
       <section className="relative overflow-hidden bg-svc-deep text-svc-light">

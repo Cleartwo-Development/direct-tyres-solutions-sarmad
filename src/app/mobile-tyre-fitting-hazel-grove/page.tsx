@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import HazelGrovePage from "@/components/locations/HazelGrovePage";
 import LocationJsonLd from "@/components/LocationJsonLd";
 import { SITE_URL } from "@/lib/seo";
+import { cmsMetadata, PageJsonLd } from "@/lib/cms";
 
-export const metadata: Metadata = {
+const fallbackMetadata: Metadata = {
   title: "Mobile Tyre Fitting in Hazel Grove | Direct Tyre Solutions",
   description:
     "24/7 mobile tyre fitting in Hazel Grove. Rapid response home, workplace and roadside tyre replacement covering routes around A6, A555, A627.",
@@ -15,8 +16,12 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <LocationJsonLd areaLabel="Hazel Grove" slug="hazel-grove" />
+      <PageJsonLd path="/mobile-tyre-fitting-hazel-grove" fallback={<LocationJsonLd areaLabel="Hazel Grove" slug="hazel-grove" />} />
       <HazelGrovePage />
     </>
   );
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/mobile-tyre-fitting-hazel-grove", fallbackMetadata);
 }
