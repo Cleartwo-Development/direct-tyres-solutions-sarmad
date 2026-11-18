@@ -2,8 +2,9 @@ import type { MetadataRoute } from "next";
 import { locationAreas } from "@/lib/locations-data";
 import { SITE_URL } from "@/lib/seo";
 import { servicePages } from "@/lib/services-data";
+import { seoFiles } from "@/lib/cms";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+function fallbackSitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -54,4 +55,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   return [...staticRoutes, ...serviceRoutes, ...locationRoutes];
+}
+
+export default async function sitemap() {
+  return seoFiles.sitemap(() => fallbackSitemap());
 }
