@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { createCmsClient, mergeMetadata, toMetadata, createSchemaComponents } from "@cleartwo/cms-sdk";
+import { createCmsClient, mergeMetadata, toMetadata, createSchemaComponents, createSeoFiles } from "@cleartwo/cms-sdk";
 
 const apiUrl = process.env.CMS_API_URL;
 const apiKey = process.env.CMS_API_KEY;
@@ -28,3 +28,6 @@ export async function cmsMetadata(path: string, fallback: Metadata): Promise<Met
 
 /** Renders CMS-managed schema (JSON-LD); the site's own component is the fallback until the CMS manages the page. */
 export const { PageJsonLd, SiteJsonLd } = createSchemaComponents(cms);
+
+/** Sitemap and robots.txt: built in the CMS when it manages them, otherwise the site's own code runs. */
+export const seoFiles = createSeoFiles(cms);

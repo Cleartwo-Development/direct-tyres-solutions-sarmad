@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo";
+import { seoFiles } from "@/lib/cms";
 
-export default function robots(): MetadataRoute.Robots {
+function fallbackRobots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
@@ -11,4 +12,8 @@ export default function robots(): MetadataRoute.Robots {
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL,
   };
+}
+
+export default async function robots() {
+  return seoFiles.robots(() => fallbackRobots());
 }
